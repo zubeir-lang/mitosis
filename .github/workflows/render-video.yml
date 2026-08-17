@@ -1,0 +1,30 @@
+name: Render Mitosis Video
+
+on:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Render MP4
+        run: python render_video.py
+
+      - name: Upload finished video
+        uses: actions/upload-artifact@v4
+        with:
+          name: mitosis-tiktok-video
+          path: output/mitosis.mp4
+          if-no-files-found: error
